@@ -1,0 +1,37 @@
+package mapreducer.task1;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.*;
+
+public class Mapper3 extends Mapper<LongWritable,Text,Text,IntWritable> 
+{
+	Text text;
+	IntWritable inst;
+	
+	@Override
+	public void setup(Context context)
+	{
+		text = new Text();
+		inst = new IntWritable();
+	}
+	
+	@Override
+	public void map(LongWritable Key,Text value,Context context)throws 
+	IOException,InterruptedException
+	{
+		String line = value.toString();
+        String[] lineArray = line.split("\\|");	
+        int num = 1;     
+        
+		if (lineArray[0].toString().toLowerCase().equals("onida"))
+		{
+			text.set(lineArray[3].toString());
+			inst.set(num);
+			context.write(text,inst);
+		}
+	}
+}
